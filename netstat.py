@@ -9,7 +9,8 @@ def htod(num):
 def trans_ipv4(hex_address):
     '''parse ip address and port'''
     hex_ip, hex_port = hex_address.split(':')
-    parts = (htod(hex_port), htod(hex_ip[:2]), htod(hex_ip[2:4]), htod(hex_ip[4:6]), htod(hex_ip[6:8]))
+    port = htod(hex_port)
+    parts = ('*' if port == 0 else port, htod(hex_ip[:2]), htod(hex_ip[2:4]), htod(hex_ip[4:6]), htod(hex_ip[6:8]))
     return '{}.{}.{}.{}:{}'.format(*parts[::-1])
 
 def trans_state(is_udp, state):
