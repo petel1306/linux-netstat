@@ -10,7 +10,8 @@ def trans_ipv4(hex_address):
     '''parse ip address and port'''
     hex_ip, hex_port = hex_address.split(':')
     port = htod(hex_port)
-    parts = ('*' if port == 0 else port, htod(hex_ip[:2]), htod(hex_ip[2:4]), htod(hex_ip[4:6]), htod(hex_ip[6:8]))
+    parts = ('*' if port == 0 else port, htod(hex_ip[:2]), htod(hex_ip[2:4]),
+          htod(hex_ip[4:6]), htod(hex_ip[6:8]))
     return '{}.{}.{}.{}:{}'.format(*parts[::-1])
 
 def trans_state(is_udp, state):
@@ -30,6 +31,7 @@ def trans_state(is_udp, state):
     }[state]
 
 def trans_timer(timer):
+    '''returns a string describing the timer'''
     kind, time = timer.split(':')
     kind = {
         '00': 'off',
