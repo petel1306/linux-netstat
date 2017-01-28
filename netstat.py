@@ -83,4 +83,5 @@ def netstat():
         print table_format.format(socket.proto, socket.recv_q, socket.send_q, socket.local_address,
             socket.foreign_address, socket.state, socket.pid, socket.timer)
 
-netstat()
+if __name__ == '__main__':
+    netstat()
