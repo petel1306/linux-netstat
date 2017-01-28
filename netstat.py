@@ -15,9 +15,9 @@ def trans_ipv4(hex_address):
           htod(hex_ip[4:6]), htod(hex_ip[6:8]))
     return '{}.{}.{}.{}:{}'.format(*parts[::-1])
 
-def trans_state(is_udp, state):
+def trans_state(proto, state):
     '''returns the socket state, if the socket is tcp'''
-    return '-' if is_udp else {
+    return '-' if proto == 'udp' else {
         '01': 'ESTABLISHED',
         '02': 'SYN_SENT',
         '03': 'SYN_RECV',
@@ -52,3 +52,24 @@ def find_pid(inode):
         except:
             pass
     return '-'
+
+class Socket(object):
+    '''parses parts of a socket'''
+    def __init__(self, proto, row):
+        parts = row.split()
+        self.proto = proto
+        self.local_address = trans_ipv4(parts[1])
+        self.foreign_address = trans_ipv4(parts[2])
+        self.state = trans_state(proto, parts[3])
+        self.send_q, self.recv_q = map(htod, parts[4].split(':'))
+        self.timer = trans_timer(parts[5])
+        self.pid = find_pid(parts[9])
+
+def get_sockets(proto):
+    '''reads info about sockets for this protocol'''
+    sockets = []
+    with open('/proc/net/{}'.format(proto)) as socket_info:
+        socket_info.readline()
+        for line in socket_info:
+            sockets.append(Socket(proto, line))
+        return sockets
