@@ -28,3 +28,14 @@ def trans_state(is_udp, state):
         '0A': 'LISTEN',
         '0B': 'CLOSING'
     }[state]
+
+def trans_timer(timer):
+    kind, time = timer.split(':')
+    kind = {
+        '00': 'off',
+        '01': 'on',
+        '02': 'keepalive',
+        '03': 'timewait'
+    }[kind]
+    time = htod(time)/100.0
+    return '{} ({})'.format(kind, time)
