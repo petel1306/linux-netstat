@@ -73,3 +73,14 @@ def get_sockets(proto):
         for line in socket_info:
             sockets.append(Socket(proto, line))
         return sockets
+
+def netstat():
+    sockets = get_sockets('tcp') + get_sockets('udp')
+    table_format = '{:5}  {:6}  {:6}   {:23} {:23} {:11} {:7} {}'
+    print table_format.format('Proto', 'Recv-Q', 'Send-Q', 'Local Address',
+        'Foreign Address', 'State', 'PID', 'Timer')
+    for socket in sockets:
+        print table_format.format(socket.proto, socket.recv_q, socket.send_q, socket.local_address,
+            socket.foreign_address, socket.state, socket.pid, socket.timer)
+
+netstat()
